@@ -1,14 +1,31 @@
+// Hardware Libraries
 var Gpio = require('onoff').Gpio;
 var LCD = require('lcdi2c');
-var lcd = new LCD( 0, 0x27, 20, 4 );
+var lcd = new LCD( 0, 0x27, 20, 4 ); // https://github.com/craigmw/lcdi2c
 
-class Test {
-    constructor(){
-        console.log("hello world")
-    }
-}
+// Software Libraries
+const Menu = require("./menu-item.js");
 
-let x = new Test()
+let parent = new Menu.Item("root", null);
+let child1 = new Menu.Item("child1", null);
+let child2 = new Menu.Item("child2", null);
+
+Menu.setRelation(parent, child1)
+Menu.setRelation(parent, child2)
+
+console.log(Menu.childrenNames(parent))
+
+/*
+
+
+*/
+
+
+
+
+
+
+
 
 const button_up = new Gpio(4, 'in', 'rising', {debounceTimeout: 50});
 const button_down = new Gpio(5, 'in', 'rising', {debounceTimeout: 50});
@@ -49,6 +66,7 @@ button_back.watch((err, value) => {
 });
 
 
+// lcd.on();
 lcd.clear();
 lcd.println( 'plThis is line 1...', 1 );
 lcd.println( 'plThis is line 2...', 2 );

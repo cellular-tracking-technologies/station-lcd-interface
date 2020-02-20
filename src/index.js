@@ -1,27 +1,12 @@
 var Gpio = require('onoff').Gpio;
-var five = require("johnny-five");
-var board = new five.Board();
-
-board.on("ready", function() {
-    console.log("just a test");
-  });
+var LCD = require('lcdi2c');
+var lcd = new LCD( 0, 0x27, 20, 4 );
 
 class Test {
     constructor(){
         console.log("hello world")
     }
 }
-
-var l = new five.LCD({
-    controller: "PCF8574A"
-  });
-
-  l.useChar("heart");
-  l.cursor(0, 0).print("hello :heart:");
-  l.blink();
-  l.cursor(1, 0).print("Blinking? ");
-  l.cursor(0, 10).print(random);
-
 
 let x = new Test()
 
@@ -35,7 +20,7 @@ button_up.watch((err, value) => {
       throw err;
     }
 
-    console.log("button_1 press")
+    console.log("button_up press")
 
 });
 button_down.watch((err, value) => {
@@ -43,7 +28,7 @@ button_down.watch((err, value) => {
       throw err;
     }
 
-    console.log("button_2 press")
+    console.log("button_down press")
 
 });
 button_select.watch((err, value) => {
@@ -51,7 +36,7 @@ button_select.watch((err, value) => {
       throw err;
     }
 
-    console.log("button_3 press")
+    console.log("button_select press")
 
 });
 button_back.watch((err, value) => {
@@ -59,8 +44,13 @@ button_back.watch((err, value) => {
       throw err;
     }
 
-    console.log("button_4 press")
+    console.log("button_back press")
 
 });
 
 
+lcd.clear();
+lcd.println( 'plThis is line 1...', 1 );
+lcd.println( 'plThis is line 2...', 2 );
+lcd.println( 'plThis is line 3...', 3 );
+lcd.println( 'plThis is line 4...', 4 );

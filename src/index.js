@@ -3,8 +3,7 @@ var Gpio = require('onoff').Gpio;
 var LCD = require('lcdi2c');
 var lcd = new LCD( 0, 0x27, 20, 4 ); // https://github.com/craigmw/lcdi2c
 
-// Software Libraries
-const Menu = require("./menu-item.js");
+import * as Menu from './menu-item';
 
 let parent = new Menu.Item("root", null);
 let child1 = new Menu.Item("child1", null);
@@ -13,7 +12,44 @@ let child2 = new Menu.Item("child2", null);
 Menu.setRelation(parent, child1)
 Menu.setRelation(parent, child2)
 
-console.log(Menu.childrenNames(parent))
+function cb(x) {
+    console.log(`${x} is working\n`)
+}
+
+parent.callback = cb
+child1.callback = cb
+
+console.log(parent.childrenNames())
+
+parent.children_.forEach(item => {
+    if(item.childCount() == 0){
+        if (typeof item.callback === 'function'){
+            item.callback(item.name)
+        }else{
+            console.log(item.name + "- No Callback")
+        }
+    }
+});
+
+console.log(parent.childCount())
+const item = parent.getChild("child2")
+console.log(item)
+console.log(typeof item)
+console.log(item.name)
+
+/*
+           a 
+    {aa ab ac} b c d    
+
+    {aaa}      {ba}  {da db dc de}
+  
+    Focus Item = a
+
+    select a.aa
+
+
+*/
+
 
 /*
            a 

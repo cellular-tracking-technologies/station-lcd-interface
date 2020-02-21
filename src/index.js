@@ -16,15 +16,12 @@ Menu.setRelation(parent, child2)
 console.log(Menu.childrenNames(parent))
 
 /*
+           a 
+    {aa ab ac} b c d    
+   {aaa}      {ba}  {da db dc de}
 
-
+   
 */
-
-
-
-
-
-
 
 
 const button_up = new Gpio(4, 'in', 'rising', {debounceTimeout: 50});

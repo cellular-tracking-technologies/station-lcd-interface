@@ -1,84 +1,55 @@
-// Hardware Libraries
+// Import Statements
+import * as Menu from './menu';
+import * as Tasks from './display-tasks';
+
+// Require Statements
 var Gpio = require('onoff').Gpio;
 
-// Software Libraries
-import * as Menu from './menu-item';
-import { display } from "./display";
+/*
+    Build the menu: Each item MUST be given:
+        A) 'name' for selecting/traversings menu-items on the screen
+        B) A function to be executed when the menu item is 'selected'
+            Note: If item has a submenu, set callback to null
+        C) List of children, which must be of type Menu.Item
+            Note: If item has no children, set to []
 
-const fetch = require('node-fetch');
+    Note: All menu items must have unique names!
+*/ 
 
-let parent = new Menu.Item("root", null);
-let child1 = new Menu.Item("child1", null);
-let child2 = new Menu.Item("child2", null);
+let menu = {
+    main: new Menu.Item("main", Tasks.welcomeTask, [
 
-Menu.setRelation(parent, child1)
-Menu.setRelation(parent, child2)
+        new Menu.Item("File Transfer", null,[
+            new Menu.Item("Usb Drive", null, [])
+        ]),
+        new Menu.Item("Location", null, []),
+        new Menu.Item("Network", null, [
+            new Menu.Item("Cellular", null, []),
+            new Menu.Item("Ethernet", null, []),
+            new Menu.Item("WiFi", null, [
+                new Menu.Item("WiFi Connect", null, [])
+            ]),
+        ]),
+        new Menu.Item("Power", null, []),
+        new Menu.Item("Server", null, []),
+        new Menu.Item("System", null, [])
 
-function cb(x) {
-    console.log(`${x} is working\n`)
+    ])    
 }
 
-parent.callback = cb
-child1.callback = cb
+let selected_item = menu.main;
 
-console.log(parent.childrenNames())
+console.log(selected_item.childCount())
+console.log(selected_item.childrenNames())
 
-parent.children_.forEach(item => {
-    if(item.childCount() == 0){
-        if (typeof item.callback === 'function'){
-            item.callback(item.name)
-        }else{
-            console.log(item.name + "- No Callback")
-        }
+selected_item.children_.forEach(item => {
+    if (typeof item.callback === 'function'){
+        console.log(item.name + "- Has Callback")
+        // item.callback(item.name)
+    }else{
+        console.log(item.name + "- No Callback")
     }
 });
-
-console.log(parent.childCount())
-const item = parent.getChild("child2")
-console.log(item)
-console.log(typeof item)
-console.log(item.name)
-
-display.clear()
-display.writeRow("hello\nworld")
-// display.writeRow("test2", 2)
-// display.writeRow("test3", 3)
-// display.writeRow("test4", 4)
-
-// const Url = 'http://192.168.0.58:8080/files/ip_address.json';
-
-// lcd.on();
-// lcd.clear();
-// lcd.println( 'Loading...', 1);
-
-// fetch(Url)
-// .then(data=>{return data.json()})
-// .then(res=>{
-
-//     lcd.clear();
-//     lcd.println(JSON.stringify(res), 1);
-
-// })
-// .catch(error=>{
-
-//     lcd.clear();
-//     lcd.println("Error!", 1);
-//     console.log(error);
-
-// });
-
-/*
-           a 
-    {aa ab ac} b c d    
-
-    {aaa}      {ba}  {da db dc de}
-  
-    Focus Item = a
-
-    select a.aa
-
-
-*/
 
 const button_up = new Gpio(4, 'in', 'rising', {debounceTimeout: 50});
 const button_down = new Gpio(5, 'in', 'rising', {debounceTimeout: 50});

@@ -1,12 +1,27 @@
 class Item{
-    constructor(name, callback){
+    constructor(name, callback, children){
         this.parent = null;
         this.callback = callback;
         this.name = name;        
-        this.children_ = [];        
+        this.children_ = children;
+        // setChildren(children);        
+    }
+    setChildren(children){
+        children.forEach(child => {
+            if((child instanceof Item) == false){
+                throw TypeError;
+            }
+        });
+
+        this.children_ = children;
     }
     addChild(child){
-        this.children_.push(child);
+        if(child instanceof Item){
+            child.parent = this;
+            this.children_.push(child);
+        }else{
+            throw TypeError;
+        }
     }
     childCount(){
         return this.children_.length;
@@ -23,17 +38,6 @@ class Item{
     }
 }
 
-function setRelation(parent, child) {
-    if(parent instanceof this.Item == false){
-        throw TypeError;
-    }else if(parent instanceof this.Item == false){
-        throw TypeError;
-    }
-
-    parent.addChild(child);
-    child.parent = parent;
-}
-
 function unitTest() {
 }
 
@@ -43,8 +47,44 @@ if (typeof module !== 'undefined' && !module.parent) {
     console.log("Importing " + module.filename)
 }
 
-export {Item, setRelation};
+export {Item};
 
+
+/*
+
+* = value
+- = Submenu
+# = Task
+
+-File Transfer
+    # Usb
+-Location
+    * Latitude
+    * Longitude
+    * Satellites in View
+-Network   
+    -Cellular  
+        * Sim
+        * Imei
+        * Carrier, ACT, dBm
+    -WiFi
+        # Connect
+    -Ip Address
+        * WiFi
+        * Ethernet
+-Power
+    * Main Voltage
+    * Solar Voltage
+    * Rtc Voltage
+-Server
+    # Connect
+System
+    - Disk
+        * Size GB
+        * Space Free GB
+        * Space Used GB
+    # Restart
+*/
 
 
 /*

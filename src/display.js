@@ -1,5 +1,5 @@
 var LCD = require('lcdi2c');
-var os = require('os');
+// var os = require('os');
 
 class Display{
     constructor(columns=20, rows=4){

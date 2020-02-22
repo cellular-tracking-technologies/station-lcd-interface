@@ -1,9 +1,11 @@
 // Hardware Libraries
 var Gpio = require('onoff').Gpio;
-var LCD = require('lcdi2c');
-var lcd = new LCD( 0, 0x27, 20, 4 ); // https://github.com/craigmw/lcdi2c
 
+// Software Libraries
 import * as Menu from './menu-item';
+import { display } from "./display";
+
+const fetch = require('node-fetch');
 
 let parent = new Menu.Item("root", null);
 let child1 = new Menu.Item("child1", null);
@@ -37,6 +39,34 @@ console.log(item)
 console.log(typeof item)
 console.log(item.name)
 
+display.clear()
+display.writeRow("hello\nworld")
+// display.writeRow("test2", 2)
+// display.writeRow("test3", 3)
+// display.writeRow("test4", 4)
+
+// const Url = 'http://192.168.0.58:8080/files/ip_address.json';
+
+// lcd.on();
+// lcd.clear();
+// lcd.println( 'Loading...', 1);
+
+// fetch(Url)
+// .then(data=>{return data.json()})
+// .then(res=>{
+
+//     lcd.clear();
+//     lcd.println(JSON.stringify(res), 1);
+
+// })
+// .catch(error=>{
+
+//     lcd.clear();
+//     lcd.println("Error!", 1);
+//     console.log(error);
+
+// });
+
 /*
            a 
     {aa ab ac} b c d    
@@ -49,16 +79,6 @@ console.log(item.name)
 
 
 */
-
-
-/*
-           a 
-    {aa ab ac} b c d    
-   {aaa}      {ba}  {da db dc de}
-
-   
-*/
-
 
 const button_up = new Gpio(4, 'in', 'rising', {debounceTimeout: 50});
 const button_down = new Gpio(5, 'in', 'rising', {debounceTimeout: 50});
@@ -98,10 +118,10 @@ button_back.watch((err, value) => {
 
 });
 
+/*
+sudo systemctl status station-lcd
+sudo i2cdetect -y 1
+sudo systemctl stop station-lcd
+journalctl -r -u station-lcd
+*/
 
-// lcd.on();
-lcd.clear();
-lcd.println( 'plThis is line 1...', 1 );
-lcd.println( 'plThis is line 2...', 2 );
-lcd.println( 'plThis is line 3...', 3 );
-lcd.println( 'plThis is line 4...', 4 );

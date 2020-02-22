@@ -28,7 +28,57 @@ class Item{
     }
 }
 
+class Scroller {
+    constructor(window_size=4){
+        this.window_size = window_size;
+        this.rows = []
+        this.first_;
+        this.last_;
+        this.selected;
+    }
+    init(rows){
+        this.rows_ = rows;
+        this.first_ = 0;
+        this.last_ = this.first_ + this.window_size;
+        this.selected = this.first_;
+    }
+    getRows(){
+        return this.rows_.slice(this.first_, this.last_);
+    }
+    scrollUp(){
+        if(this.first_ <= 0){
+            return;
+        }
+        this.first_--;
+        this.last_--;
+    }
+    scrollDown(){
+        if(this.last_< this.rows_.length){
+            this.last_++;
+            this.first_++;
+        }
+    }
+}
+
 function unitTest() {
+    let data = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+
+    let s = new Scroller()
+    s.init(data)
+    console.log(s.first_)
+    console.log(s.last_)
+    for(let x = 0; x < 20; x++){
+        console.log(s.getRows())
+        s.scrollDown()
+    }
+
+    console.log("")
+    console.log("")
+
+    for(let x = 0; x < 20; x++){
+        console.log(s.getRows())
+        s.scrollUp()
+    }
 }
 
 if (typeof module !== 'undefined' && !module.parent) {
@@ -37,7 +87,7 @@ if (typeof module !== 'undefined' && !module.parent) {
     console.log("Importing " + module.filename)
 }
 
-export {Item};
+export {Item, Scroller};
 
 
 /*

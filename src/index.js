@@ -16,28 +16,24 @@ var Gpio = require('onoff').Gpio;
     Note: All menu items must have unique names!
 */ 
 
-let menu = {
-    main: new Menu.Item("main", Tasks.welcomeTask, [
-
-        new Menu.Item("File Transfer", null,[
-            new Menu.Item("Usb Drive", null, [])
+let menu = new Menu.Item("main", Tasks.welcomeTask, [
+    new Menu.Item("File Transfer", null,[
+        new Menu.Item("Usb Drive", null, [])
+    ]),
+    new Menu.Item("Location", null, []),
+    new Menu.Item("Network", null, [
+        new Menu.Item("Cellular", null, []),
+        new Menu.Item("Ethernet", null, []),
+        new Menu.Item("WiFi", null, [
+            new Menu.Item("WiFi Connect", null, [])
         ]),
-        new Menu.Item("Location", null, []),
-        new Menu.Item("Network", null, [
-            new Menu.Item("Cellular", null, []),
-            new Menu.Item("Ethernet", null, []),
-            new Menu.Item("WiFi", null, [
-                new Menu.Item("WiFi Connect", null, [])
-            ]),
-        ]),
-        new Menu.Item("Power", null, []),
-        new Menu.Item("Server", null, []),
-        new Menu.Item("System", null, [])
+    ]),
+    new Menu.Item("Power", null, []),
+    new Menu.Item("Server", null, []),
+    new Menu.Item("System", null, [])
+]);  
 
-    ])    
-}
-
-let selected_item = menu.main;
+let selected_item = menu;
 
 console.log(selected_item.childCount())
 console.log(selected_item.childrenNames())

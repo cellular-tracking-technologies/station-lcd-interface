@@ -4,16 +4,6 @@ class Item{
         this.callback = callback;
         this.name = name;        
         this.children_ = children;
-        // setChildren(children);        
-    }
-    setChildren(children){
-        children.forEach(child => {
-            if((child instanceof Item) == false){
-                throw TypeError;
-            }
-        });
-
-        this.children_ = children;
     }
     addChild(child){
         if(child instanceof Item){

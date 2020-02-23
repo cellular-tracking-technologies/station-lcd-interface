@@ -46,14 +46,19 @@ class Scroller {
         return this.rows_.slice(this.first_, this.last_);
     }
     scrollUp(){
-        if(this.first_ <= 0){
-            return;
+        if(this.selected > 0){
+            this.selected--;
         }
-        this.first_--;
-        this.last_--;
+        if(this.first_ > 0){
+            this.first_--;
+            this.last_--;
+        }
     }
     scrollDown(){
-        if(this.last_< this.rows_.length){
+        if(this.selected < this.rows_.length-1){
+            this.selected++;
+        }
+        if(this.last_ < this.rows_.length){
             this.last_++;
             this.first_++;
         }
@@ -67,8 +72,9 @@ function unitTest() {
     s.init(data)
     console.log(s.first_)
     console.log(s.last_)
+    console.log(s.rows_.length)
     for(let x = 0; x < 20; x++){
-        console.log(s.getRows())
+        console.log(s.getRows() + " " + s.selected + " " + s.first_ + " " + s.last_)
         s.scrollDown()
     }
 
@@ -76,7 +82,7 @@ function unitTest() {
     console.log("")
 
     for(let x = 0; x < 20; x++){
-        console.log(s.getRows())
+        console.log(s.getRows() + " " + s.selected + " " + s.first_ + " " + s.last_)
         s.scrollUp()
     }
 }

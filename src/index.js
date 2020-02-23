@@ -33,19 +33,40 @@ let menu = new Menu.Item("main", Tasks.welcomeTask, [
     new Menu.Item("System", null, [])
 ]);  
 
+let s = new Menu.Scroller()
 let selected_item = menu;
+s.init(selected_item.childrenNames())
 
-console.log(selected_item.childCount())
-console.log(selected_item.childrenNames())
+display();
 
-selected_item.children_.forEach(item => {
-    if (typeof item.callback === 'function'){
-        console.log(item.name + "- Has Callback")
-        // item.callback(item.name)
-    }else{
-        console.log(item.name + "- No Callback")
-    }
-});
+function display(){
+    console.log("")
+
+    let rows = s.getRows();
+    let selected_row = s.getSelectedRow()
+
+    rows.forEach(element => {
+        if(selected_row == element){
+            console.log(`> ${element}`)
+        }else{
+            console.log(`  ${element}`)
+        }
+    });
+    
+    console.log("")
+}
+
+// console.log(selected_item.childCount())
+// console.log(selected_item.childrenNames())
+
+// selected_item.children_.forEach(item => {
+//     if (typeof item.callback === 'function'){
+//         console.log(item.name + "- Has Callback")
+//         // item.callback(item.name)
+//     }else{
+//         console.log(item.name + "- No Callback")
+//     }
+// });
 
 const button_up = new Gpio(4, 'in', 'rising', {debounceTimeout: 50});
 const button_down = new Gpio(5, 'in', 'rising', {debounceTimeout: 50});
@@ -57,7 +78,9 @@ button_up.watch((err, value) => {
       throw err;
     }
 
-    console.log("button_up press")
+    console.log("Up")
+    s.up();
+    display();
 
 });
 button_down.watch((err, value) => {
@@ -65,15 +88,16 @@ button_down.watch((err, value) => {
       throw err;
     }
 
-    console.log("button_down press")
-
+    console.log("Down")
+    s.down();
+    display();
 });
 button_select.watch((err, value) => {
     if (err) {
       throw err;
     }
 
-    console.log("button_select press")
+    console.log("Select")
 
 });
 button_back.watch((err, value) => {
@@ -81,7 +105,7 @@ button_back.watch((err, value) => {
       throw err;
     }
 
-    console.log("button_back press")
+    console.log("Back")
 
 });
 

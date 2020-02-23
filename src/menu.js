@@ -30,34 +30,49 @@ class Item{
 
 class Scroller {
     constructor(window_size=4){
-        this.window_size = window_size;
-        this.rows = []
+        this.window_size_ = window_size;
+        this.rows_ = []
         this.first_;
         this.last_;
-        this.selected;
+        this.selected_;
     }
     init(rows){
         this.rows_ = rows;
         this.first_ = 0;
-        this.last_ = this.first_ + this.window_size;
-        this.selected = this.first_;
+        this.last_ = this.first_ + this.window_size_;
+        this.selected_ = this.first_;
     }
     getRows(){
         return this.rows_.slice(this.first_, this.last_);
     }
-    scrollUp(){
-        if(this.selected > 0){
-            this.selected--;
+    getSelectedRow(){
+        let r = this.getRows()
+        return r[this.selected_ - this.first_];
+    }
+    up(){
+        if(this.selected_ > 0){
+            this.selected_--;
+            if(this.selected_ < this.first_){
+                this.scrollUp_();
+            }
         }
+    }
+    down(){
+        if(this.selected_ < this.rows_.length-1){
+            this.selected_++;
+            if(this.selected_ >= this.last_){
+                this.scrollDown_();
+            }
+        }
+        // console.log(`S:${this.selected} F:${this.first_} L:${this.last_}`)
+    }
+    scrollUp_(){        
         if(this.first_ > 0){
             this.first_--;
             this.last_--;
         }
     }
-    scrollDown(){
-        if(this.selected < this.rows_.length-1){
-            this.selected++;
-        }
+    scrollDown_(){
         if(this.last_ < this.rows_.length){
             this.last_++;
             this.first_++;
@@ -66,25 +81,7 @@ class Scroller {
 }
 
 function unitTest() {
-    let data = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 
-    let s = new Scroller()
-    s.init(data)
-    console.log(s.first_)
-    console.log(s.last_)
-    console.log(s.rows_.length)
-    for(let x = 0; x < 20; x++){
-        console.log(s.getRows() + " " + s.selected + " " + s.first_ + " " + s.last_)
-        s.scrollDown()
-    }
-
-    console.log("")
-    console.log("")
-
-    for(let x = 0; x < 20; x++){
-        console.log(s.getRows() + " " + s.selected + " " + s.first_ + " " + s.last_)
-        s.scrollUp()
-    }
 }
 
 if (typeof module !== 'undefined' && !module.parent) {

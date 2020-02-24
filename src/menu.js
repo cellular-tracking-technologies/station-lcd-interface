@@ -1,9 +1,17 @@
 class Item{
-    constructor(name, callback, children){
+    constructor(name, view, children){
+        this.name = name;
         this.parent = null;
-        this.callback = callback;
-        this.name = name;        
-        this.children_ = children;
+        // this.children_ = children;
+
+        let self = this;
+        this.children_ = children.map(function(child) {             
+            child.parent = self;
+            return child;
+          });
+
+
+        this.view = view;        
     }
     addChild(child){
         if(child instanceof Item){

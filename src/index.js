@@ -8,8 +8,9 @@ var Gpio = require('onoff').Gpio;
 /*
     Build the menu: Each item MUST be given:
         A) 'name' for selecting/traversings menu-items on the screen
-        B) A function to be executed when the menu item is 'selected'
-            Note: If item has a submenu, set callback to null
+        B) A display view to be rendered when the menu item is 'selected'
+            Note: If item is a submenu, set view to null as the next menu will
+                be rendered in-leui of a custom view.
         C) List of children, which must be of type Menu.Item
             Note: If item has no children, set to []
 
@@ -23,7 +24,7 @@ let menu = new Menu.Item("main", Tasks.welcomeTask, [
     new Menu.Item("Location", null, []),
     new Menu.Item("Network", null, [
         new Menu.Item("Cellular", null, []),
-        new Menu.Item("Ethernet", null, []),
+        new Menu.Item("Ip Address", Tasks.ipAddress, []),
         new Menu.Item("WiFi", null, [
             new Menu.Item("WiFi Connect", null, [])
         ]),
@@ -33,11 +34,40 @@ let menu = new Menu.Item("main", Tasks.welcomeTask, [
     new Menu.Item("System", null, [])
 ]);  
 
+
 let s = new Menu.Scroller()
-let selected_item = menu;
-s.init(selected_item.childrenNames())
+let focused_item = menu;
+s.init(focused_item.childrenNames())
 
 display();
+
+function select(){
+    let row = focused_item.getChild(s.getSelectedRow())
+
+    if(typeof row.view === "function") {
+        row.view();
+        return;
+    }
+    if(row.childCount() > 0){
+        s.init(row.childrenNames());
+        focused_item = row;
+    }
+    display();
+}
+
+function back(){
+    let row = focused_item;
+
+    if(typeof row.view === "function") {
+        display();
+        return;
+    }
+    console.log(row)
+    if(row.parent != null){
+        focused_item = focused_item.parent;
+    }
+    display();
+}
 
 function display(){
     console.log("")
@@ -98,15 +128,16 @@ button_select.watch((err, value) => {
     }
 
     console.log("Select")
-
+    select();
 });
+
 button_back.watch((err, value) => {
     if (err) {
       throw err;
     }
 
     console.log("Back")
-
+    back();
 });
 
 /*

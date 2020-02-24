@@ -1,5 +1,6 @@
 // Import Statements
-import * as Menu from './menu';
+import {Item as MenuItem } from "./menu";
+import {Manager as Menu} from "./station-menu"
 import * as Tasks from './display-tasks';
 
 // Require Statements
@@ -11,91 +12,31 @@ var Gpio = require('onoff').Gpio;
         B) A display view to be rendered when the menu item is 'selected'
             Note: If item is a submenu, set view to null as the next menu will
                 be rendered in-leui of a custom view.
-        C) List of children, which must be of type Menu.Item
+        C) List of children, which must be of type MenuItem
             Note: If item has no children, set to []
 
     Note: All menu items must have unique names!
 */ 
 
-let menu = new Menu.Item("main", Tasks.welcomeTask, [
-    new Menu.Item("File Transfer", null,[
-        new Menu.Item("Usb Drive", null, [])
+let items = new MenuItem("main", Tasks.welcomeTask, [
+    new MenuItem("File Transfer", null,[
+        new MenuItem("Usb Drive", null, [])
     ]),
-    new Menu.Item("Location", null, []),
-    new Menu.Item("Network", null, [
-        new Menu.Item("Cellular", null, []),
-        new Menu.Item("Ip Address", Tasks.ipAddress, []),
-        new Menu.Item("WiFi", null, [
-            new Menu.Item("WiFi Connect", null, [])
+    new MenuItem("Location", null, []),
+    new MenuItem("Network", null, [
+        new MenuItem("Cellular", null, []),
+        new MenuItem("Ip Address", Tasks.ipAddress, []),
+        new MenuItem("WiFi", null, [
+            new MenuItem("WiFi Connect", null, [])
         ]),
     ]),
-    new Menu.Item("Power", null, []),
-    new Menu.Item("Server", null, []),
-    new Menu.Item("System", null, [])
+    new MenuItem("Power", null, []),
+    new MenuItem("Server", null, []),
+    new MenuItem("System", null, [])
 ]);  
 
-let s = new Menu.Scroller()
-let focused_item = menu;
-s.init(focused_item.childrenNames())
-
-display();
-
-function select(){
-    
-    /*
-    User enters custom view from custom view.
-    Potential Behaviors:
-        A) Nothing Happens
-        B) Update Values in Custom View
-        C) Perform some task for each push of select
-    */
-    if(focused_item.childCount() == 0){       
-        if(typeof focused_item.view === "function") {
-            focused_item.view();
-            return;
-        }
-    }
-
-    // Launch a custom view by way of submenu transition.
-    let row = focused_item.getChild(s.getSelectedRow())
-    if(typeof row.view === "function") {
-        focused_item = row;
-        row.view();
-        return;
-    }
-
-    // User Enters a sub menu
-    if(row.childCount() > 0){
-        s.init(row.childrenNames());
-        focused_item = row;
-    }
-    display();
-}
-
-function back(){
-    if(focused_item.parent_id != null){
-        focused_item = Menu.findById(menu, focused_item.parent_id);
-        s.init(focused_item.childrenNames())
-    }
-    display();
-}
-
-function display(){
-    console.log("")
-
-    let rows = s.getRows();
-    let selected_row = s.getSelectedRow()
-
-    rows.forEach(element => {
-        if(selected_row == element){
-            console.log(`> ${element}`)
-        }else{
-            console.log(`  ${element}`)
-        }
-    });
-    
-    console.log("")
-}
+let menu = new Menu(items);
+menu.init();
 
 const button_up = new Gpio(4, 'in', 'rising', {debounceTimeout: 50});
 const button_down = new Gpio(5, 'in', 'rising', {debounceTimeout: 50});
@@ -106,37 +47,26 @@ button_up.watch((err, value) => {
     if (err) {
       throw err;
     }
-
-    console.log("Up")
-    s.up();
-    display();
-
+    menu.up();
 });
 button_down.watch((err, value) => {
     if (err) {
       throw err;
     }
-
-    console.log("Down")
-    s.down();
-    display();
+    menu.down();
 });
 button_select.watch((err, value) => {
     if (err) {
       throw err;
     }
-
-    console.log("Select")
-    select();
+    menu.select();
 });
 
 button_back.watch((err, value) => {
     if (err) {
       throw err;
     }
-
-    console.log("Back")
-    back();
+    menu.back();
 });
 
 /*

@@ -41,13 +41,30 @@ s.init(focused_item.childrenNames())
 display();
 
 function select(){
-    let row = focused_item.getChild(s.getSelectedRow())
+    
+    /*
+    User enters custom view from custom view.
+    Potential Behaviors:
+        A) Nothing Happens
+        B) Update Values in Custom View
+        C) Perform some task for each push of select
+    */
+    if(focused_item.childCount() == 0){       
+        if(typeof focused_item.view === "function") {
+            focused_item.view();
+            return;
+        }
+    }
 
+    // Launch a custom view by way of submenu transition.
+    let row = focused_item.getChild(s.getSelectedRow())
     if(typeof row.view === "function") {
         focused_item = row;
         row.view();
         return;
     }
+
+    // User Enters a sub menu
     if(row.childCount() > 0){
         s.init(row.childrenNames());
         focused_item = row;
@@ -79,18 +96,6 @@ function display(){
     
     console.log("")
 }
-
-// console.log(selected_item.childCount())
-// console.log(selected_item.childrenNames())
-
-// selected_item.children_.forEach(item => {
-//     if (typeof item.callback === 'function'){
-//         console.log(item.name + "- Has Callback")
-//         // item.callback(item.name)
-//     }else{
-//         console.log(item.name + "- No Callback")
-//     }
-// });
 
 const button_up = new Gpio(4, 'in', 'rising', {debounceTimeout: 50});
 const button_down = new Gpio(5, 'in', 'rising', {debounceTimeout: 50});

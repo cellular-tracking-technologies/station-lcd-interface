@@ -34,7 +34,6 @@ let menu = new Menu.Item("main", Tasks.welcomeTask, [
     new Menu.Item("System", null, [])
 ]);  
 
-
 let s = new Menu.Scroller()
 let focused_item = menu;
 s.init(focused_item.childrenNames())
@@ -45,6 +44,7 @@ function select(){
     let row = focused_item.getChild(s.getSelectedRow())
 
     if(typeof row.view === "function") {
+        focused_item = row;
         row.view();
         return;
     }
@@ -56,15 +56,9 @@ function select(){
 }
 
 function back(){
-    let row = focused_item;
-
-    if(typeof row.view === "function") {
-        display();
-        return;
-    }
-    console.log(row)
-    if(row.parent != null){
-        focused_item = focused_item.parent;
+    if(focused_item.parent_id != null){
+        focused_item = Menu.findById(menu, focused_item.parent_id);
+        s.init(focused_item.childrenNames())
     }
     display();
 }

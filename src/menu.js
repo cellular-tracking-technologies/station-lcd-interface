@@ -1,39 +1,48 @@
 class Item{
-    constructor(name, view, children){
-        this.name = name;
-        this.parent = null;
-        // this.children_ = children;
-
-        let self = this;
-        this.children_ = children.map(function(child) {             
-            child.parent = self;
-            return child;
-          });
-
-
+    constructor(id, view, children){
+        this.id = id;
+        this.parent_id = null;
+        this.children = [];
+        
+        this.setChildren_(children);
         this.view = view;        
     }
-    addChild(child){
-        if(child instanceof Item){
-            child.parent = this;
-            this.children_.push(child);
-        }else{
-            throw TypeError;
-        }
+    setChildren_(children){
+        let parent_id = this.id;
+        this.children = children.map((child) => {             
+            child.parent_id = parent_id;
+            return child;
+        });
     }
     childCount(){
-        return this.children_.length;
+        return this.children.length;
     }
-    getChild(name){
-        return this.children_.find(obj => (obj.name == name))
+    getChild(id){
+        return this.children.find(obj => (obj.id == id))
     }
     childrenNames(){
-        let names = []
-        this.children_.forEach(child => {
-            names.push(child.name);
+        let ids = []
+        this.children.forEach(child => {
+            ids.push(child.id);
         });
-        return names
+        return ids
     }
+}
+
+function findById(menu, id){
+    if(menu.id == id){
+        return menu;
+    }else if(menu.childCount() > 0){
+        let result = null;
+        for(let i=0; i < menu.childCount(); i++){
+             result = findById(menu.children[i], id);
+             if(result != null){
+                 break;
+             }
+        }
+        return result;
+    }
+    return null;
 }
 
 class Scroller {
@@ -98,7 +107,7 @@ if (typeof module !== 'undefined' && !module.parent) {
     console.log("Importing " + module.filename)
 }
 
-export {Item, Scroller};
+export {Item, findById, Scroller};
 
 
 /*

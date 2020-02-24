@@ -1,5 +1,6 @@
 // Import Statements
 import {Scroller, findById as findMenuItem} from './menu';
+import {display} from "./display";
 
 class Manager {
     constructor(menu) {
@@ -57,20 +58,19 @@ class Manager {
         this.update_();
     }
     update_() {
-        console.log("")
-
         let rows = this.scroller.getRows();
-        let selected_row = this.scroller.getSelectedRow()
+        let selected_row = this.scroller.getSelectedRow();
     
+        let formatted = []
         rows.forEach(element => {
             if(selected_row == element){
-                console.log(`> ${element}`)
+                formatted.push(`> ${element}`);
             }else{
-                console.log(`  ${element}`)
+                formatted.push(`  ${element}`);
             }
         });
-        
-        console.log("")
+
+        display.write(formatted);
     }
 }
 

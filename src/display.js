@@ -14,6 +14,17 @@ class Display{
         this.lcd.on();
         this.lcd.clear();
     }
+    write(rows){
+        let line = 1;
+        display.clear();
+        console.log("");
+        rows.forEach(element => {
+            display.writeRow(element, line);
+            console.log(element);
+            line++;
+        });
+        console.log("");
+    }
     writeRow(data, row){
         if(typeof data != 'string'){
             throw TypeError;

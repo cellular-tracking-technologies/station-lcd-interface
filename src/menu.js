@@ -81,7 +81,6 @@ class Scroller {
                 this.scrollDown_();
             }
         }
-        // console.log(`S:${this.selected} F:${this.first_} L:${this.last_}`)
     }
     scrollUp_(){        
         if(this.first_ > 0){

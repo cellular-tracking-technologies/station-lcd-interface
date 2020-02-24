@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "es6": "node src/index.js",
+    "es6": "node index.js",
     "dev": "npm run babel && node lib/index.js",
     "start": "node lib/index.js",
     "build": "npm run babel",

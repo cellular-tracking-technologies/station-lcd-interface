@@ -1,11 +1,11 @@
 // Import Statements
-import * as Menu from './menu';
+import {Scroller, findById as findMenuItem} from './menu';
 
 class Manager {
     constructor(menu) {
         this.menu = menu;
         this.focus = menu;
-        this.scroller = new Menu.Scroller();
+        this.scroller = new Scroller();
     }
     init() {
         this.scroller.init(this.focus.childrenNames());
@@ -51,7 +51,7 @@ class Manager {
     }
     back() {
         if(this.focus.parent_id != null){
-            this.focus = Menu.findById(this.menu, this.focus.parent_id);
+            this.focus = findMenuItem(this.menu, this.focus.parent_id);
             this.scroller.init(this.focus.childrenNames())
         }
         this.update_();

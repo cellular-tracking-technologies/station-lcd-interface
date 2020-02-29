@@ -8,7 +8,8 @@ class Display{
         this.lcd;
     }
     init(){
-        this.lcd = new LCD( 0, 0x27, this.columns, this.rows ); // https://github.com/craigmw/lcdi2c
+        // i2c addresses 0x3f 0x27
+        this.lcd = new LCD( 1, 0x3f, this.columns, this.rows ); // https://github.com/craigmw/lcdi2c
     }
     clear(){
         this.lcd.on();

@@ -1,11 +1,11 @@
 import { display } from "./display";
 const fetch = require('node-fetch');
 var os = require('os');
-var ifaces = os.networkInterfaces();
 
 function ipAddress() {
     let rows = ["Ip Address"]
     let keys = ["eth0", "wlan0"];
+    var ifaces = os.networkInterfaces();
     keys.forEach(function (ifname) {
         if(ifaces.hasOwnProperty(ifname) == false){
             return;
@@ -41,12 +41,36 @@ function location() {
 }
 
 function cellular() {
+    // localhost:3000/modem
+
+     const Url = 'http://localhost:3000/modem';
+
     display.write([
         "Cellular",
-        "Carrier: AT&T,-87",
-        "Tech: 4G",
+        "Loading...",
+        "",
         ""
     ])
+
+    fetch(Url)
+    .then(data=>{ return data.json()})
+    .then(res=>{
+        display.write([
+            "Cellular",
+            res.carrier,
+            res.signal,
+            res.info
+        ]);
+    })
+    .catch(error=>{
+        console.log(error)
+        display.write([
+            "Cellular",
+            "Error",
+            "",
+            ""
+        ]);
+    });
 }
 
 function wifiConnect() {

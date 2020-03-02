@@ -2,6 +2,8 @@ import { display } from "./display";
 const fetch = require('node-fetch');
 var os = require('os');
 
+const base_url = 'http://localhost:3000';
+
 function ipAddress() {
     let rows = ["Ip Address"]
     let keys = ["eth0", "wlan0"];
@@ -41,35 +43,16 @@ function location() {
 }
 
 function cellular() {
-    // localhost:3000/modem
+    display.write(["Cellular","Loading...","",""])
 
-     const Url = 'http://localhost:3000/modem';
-
-    display.write([
-        "Cellular",
-        "Loading...",
-        "",
-        ""
-    ])
-
-    fetch(Url)
-    .then(data=>{ return data.json()})
+    fetch(base_url + '/modem')
+    .then(data=>{ 
+        return data.json()})
     .then(res=>{
-        display.write([
-            "Cellular",
-            res.carrier,
-            res.signal,
-            res.info
-        ]);
+        display.write(["Cellular", res.carrier, res.signal, res.info]);
     })
     .catch(error=>{
-        console.log(error)
-        display.write([
-            "Cellular",
-            "Error",
-            "",
-            ""
-        ]);
+        display.write(["Cellular", "Error", "", ""]);
     });
 }
 
@@ -83,12 +66,19 @@ function wifiConnect() {
 }
 
 function power() {
-    display.write([
-        "Power",
-        "Battery 12.1 [Volts]",
-        "Solar   24.0 [Volts]",
-        "Rtc     3.1  [Volts]"
-    ])
+    const title = "Power [Volts]"
+    
+    display.write([title,"Loading...","",""])
+
+    fetch(base_url + '/sensor/voltages')
+    .then(data=>{ 
+        return data.json()})
+    .then(res=>{
+        display.write([title, `Battery:${res.battery}`, `Rtc:${res.rtc}`, `Solar:${res.solar}`]);
+    })
+    .catch(error=>{
+        display.write([title, "Error", "", ""]);
+    });
 }
 function server() {
     display.write([
@@ -117,32 +107,3 @@ export {
     server,
     system
 };
-
-
-    // const Url = 'http://192.168.0.58:8080/files/ip_address.json';
-
-    // display.write([
-    //     "Ip Address",
-    //     "Loading...",
-    //     "",
-    //     ""
-    // ])
-
-    // fetch(Url)
-    // .then(data=>{return data.json()})
-    // .then(res=>{
-    //     display.write([
-    //         res.ip.toString(),
-    //         "",
-    //         "",
-    //         ""
-    //     ])
-    // })
-    // .catch(error=>{
-    //     display.write([
-    //         "Error!",
-    //         "",
-    //         "",
-    //         ""
-    //     ])
-    // });

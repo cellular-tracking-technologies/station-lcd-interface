@@ -34,6 +34,8 @@ class Display{
     }    
 }
 
-export let display = new Display();
+let display = new Display();
 
 display.init()
+
+export {display};

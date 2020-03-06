@@ -31,6 +31,7 @@ let items = new MenuItem("main", null, [
         ]),
     ]),
     new MenuItem("Power", Views.power, []),
+    new MenuItem("Sensor", Views.sensor, []),
     new MenuItem("Server", Views.server, []),
     new MenuItem("System", Views.system, [])
 ]);  

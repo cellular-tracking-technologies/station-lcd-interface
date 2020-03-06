@@ -6,21 +6,18 @@ const base_url = 'http://localhost:3000';
 
 function ipAddress() {
     let rows = ["Ip Address"]
-    let keys = ["eth0", "wlan0"];
+    const regex = /(wlan\d+|eth\d+)/;   // Match all 'eth' or 'wlan' interfaces
     var ifaces = os.networkInterfaces();
-    keys.forEach(function (ifname) {
-        if(ifaces.hasOwnProperty(ifname) == false){
-            return;
+
+    for (let [key, value] of Object.entries(ifaces)){
+        if(key.match(regex)){
+            const result = value.filter(element => (element.family == 'IPv4') && (element.internal == false));
+            result.forEach(element =>{
+                rows.push(`${key} ${element.address}`);
+            })        
         }
-        ifaces[ifname].forEach(function (iface) {
-            if ('IPv4' !== iface.family || iface.internal !== false) {
-                return; // Skip internal (i.e. 127.0.0.1) and non-ipv4 addresses
-            }
-            // Each interface could have multiple addresses. We will store all
-            // we find, but only up to 3 total addresses can be displayed.
-            rows.push(`${ifname} ${iface.address}`)
-        });
-    });
+    } 
+
     display.write(rows)
 }
 
@@ -66,10 +63,8 @@ function wifiConnect() {
 }
 
 function power() {
-    const title = "Power [Volts]"
-    
+    const title = "Power [Volts]"    
     display.write([title,"Loading...","",""])
-
     fetch(base_url + '/sensor/voltages')
     .then(data=>{ 
         return data.json()})
@@ -79,6 +74,14 @@ function power() {
     .catch(error=>{
         display.write([title, "Error", "", ""]);
     });
+}
+function sensor() {
+    display.write([
+        "Sensor",
+        "Pressure: 10 mPa",
+        "Celsius: 2.0",
+        ""
+    ])
 }
 function server() {
     display.write([
@@ -104,6 +107,7 @@ export {
     cellular,
     wifiConnect,
     power,
+    sensor,
     server,
     system
 };

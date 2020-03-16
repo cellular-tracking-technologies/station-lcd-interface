@@ -20,14 +20,45 @@ function ipAddress() {
 
     display.write(rows)
 }
+function usbMount() {
 
+    display.write(["Usb","Mounting...","",""])
+
+    fetch(base_url + '/usb/mount')
+    .then(data=>{ 
+        return data.json()})
+    .then(res=>{
+        display.write(["Usb", `Mount:${res.status}`,"",""]);
+    })
+    .catch(error=>{
+        display.write(["Usb", `Mount:error`,"",""]);
+    });
+}
+function usbUnmount() {
+    display.write(["Usb","Unmounting...","",""])
+
+    fetch(base_url + '/usb/unmount')
+    .then(data=>{ 
+        return data.json()})
+    .then(res=>{
+        display.write(["Usb", `Unmount:${res.status}`,"",""]);
+    })
+    .catch(error=>{
+        display.write(["Usb", `Unmount:error`,"",""]);
+    });
+}
 function usbDownload() {
-    display.write([
-        "Usb Download",
-        " Complete!",
-        "",
-        ""
-    ])
+    display.write(["Usb","Downloading...","",""])
+
+    fetch(base_url + '/usb/data')
+    .then(data=>{ 
+        return data.json()})
+    .then(res=>{
+        display.write(["Usb", `Download:${res.status}`,"",""]);
+    })
+    .catch(error=>{
+        display.write(["Usb", `Download:error`,"",""]);
+    });
 }
 
 function location() {
@@ -102,6 +133,8 @@ function system() {
 
 export {
     ipAddress,
+    usbMount,
+    usbUnmount,
     usbDownload,
     location,
     cellular,

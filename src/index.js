@@ -20,7 +20,9 @@ var Gpio = require('onoff').Gpio; // RaspberryPI Gpio functions
 
 let items = new MenuItem("main", null, [
     new MenuItem("File Transfer", null,[
-        new MenuItem("Usb Drive", Views.usbDownload, [])
+        new MenuItem("Mount Usb", Views.usbMount, []),
+        new MenuItem("Unmount Usb", Views.usbUnmount, []),
+        new MenuItem("Download", Views.usbDownload, [])
     ]),
     new MenuItem("Location", Views.location, []),
     new MenuItem("Network", null, [
@@ -90,3 +92,28 @@ button_back.watch((err, value) => {
     }
     menu.back();
 });
+
+
+// let x = `     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+// 00:          -- -- -- -- -- -- -- -- -- -- -- -- -- 
+// 10: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+// 20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+// 30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 3f 
+// 40: -- -- -- -- -- -- -- -- 48 49 -- -- -- -- -- -- 
+// 50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- 
+// 60: -- -- -- -- 64 -- -- -- UU -- -- -- -- -- -- -- 
+// 70: -- -- -- -- -- -- 76 --`;
+
+// console.log(x);
+
+// let addresses = []
+
+// x.split("\n")
+// .filter(line => line.indexOf(":") > -1)
+// .forEach(line =>{
+//     let data = line.match(/ [A-Fa-f0-9]{2}/g);
+//     if(data != null){
+//         addresses.push(...data.map(record => record.trim()));
+//     }    
+// });
+// console.log(addresses);

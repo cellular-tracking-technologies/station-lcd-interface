@@ -9,8 +9,14 @@ class Manager {
         this.scroller = new Scroller();
     }
     init() {
+
         this.scroller.init(this.focus.childrenNames());
-        this.update_();
+
+        display.init().then(() =>{
+            this.update_();
+        }).catch((err)=>{
+            throw(err);
+        })
     }
     up() {
         this.scroller.up();

@@ -123,12 +123,17 @@ function server() {
     ])
 }
 function system() {
-    display.write([
-        "System",
-        "Fw: 1.0.0",
-        "Hw: 2.0",
-        "2020-02-24 18:05:16"
-    ])
+    display.write(["System","Loading...","",""])
+
+    fetch(base_url + '/id')
+    .then(data=>{ 
+        return data.json()})
+    .then(res=>{
+        display.write(["System",res.id,"",""])
+    })
+    .catch(error=>{
+        display.write(["System","error","",""])
+    });
 }
 
 export {

@@ -22,19 +22,17 @@ let items = new MenuItem("main", null, [
     new MenuItem("File Transfer", null,[
         new MenuItem("Mount Usb", Views.usbMount, []),
         new MenuItem("Unmount Usb", Views.usbUnmount, []),
-        new MenuItem("Download", Views.usbDownload, [])
+        new MenuItem("Download", Views.usbDownload, []),
+        new MenuItem("Get WiFi", Views.wifiConnect, [])
     ]),
-    new MenuItem("Location", Views.location, []),
     new MenuItem("Network", null, [
         new MenuItem("Cellular", Views.cellular, []),
-        new MenuItem("Ip Address", Views.ipAddress, []),
-        new MenuItem("WiFi", null, [
-            new MenuItem("WiFi Connect", Views.wifiConnect, [])
-        ]),
+        new MenuItem("Ip Address", Views.ipAddress, [])
     ]),
+    new MenuItem("Server", Views.server, []),
     new MenuItem("Power", Views.power, []),
     new MenuItem("Sensor", Views.sensor, []),
-    new MenuItem("Server", Views.server, []),
+    new MenuItem("Location", Views.location, []),
     new MenuItem("System", Views.system, [])
 ]);  
 

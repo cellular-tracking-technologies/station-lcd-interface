@@ -1,6 +1,7 @@
 import { display } from "./display";
 const fetch = require('node-fetch');
 var os = require('os');
+const url = require('url');
 
 const base_url = 'http://localhost:3000';
 
@@ -24,7 +25,7 @@ function usbMount() {
 
     display.write(["Usb","Mounting...","",""])
 
-    fetch(base_url + '/usb/mount')
+    fetch(url.resolve(base_url, 'usb/mount'))
     .then(data=>{ 
         return data.json()})
     .then(res=>{
@@ -37,7 +38,7 @@ function usbMount() {
 function usbUnmount() {
     display.write(["Usb","Unmounting...","",""])
 
-    fetch(base_url + '/usb/unmount')
+    fetch(url.resolve(base_url, 'usb/unmount'))
     .then(data=>{ 
         return data.json()})
     .then(res=>{
@@ -50,7 +51,7 @@ function usbUnmount() {
 function usbDownload() {
     display.write(["Usb","Downloading...","",""])
 
-    fetch(base_url + '/usb/data')
+    fetch(url.resolve(base_url, 'usb/data'))
     .then(data=>{ 
         return data.json()})
     .then(res=>{
@@ -62,18 +63,25 @@ function usbDownload() {
 }
 
 function location() {
-    display.write([
-        "Location",
-        "Lat: 39.021912",
-        "Lon:-74.89286",
-        ""
-    ])
+    display.write(["Location","Loading...","",""])
+
+    fetch(url.resolve(base_url, 'gps'))
+    .then(data=>{ 
+        return data.json()})
+    .then(res=>{
+        display.write(["Location", `Lat:${res.mean.lat}`, `Lon:${res.mean.lng}` ,""]);
+    })
+    .catch(error=>{
+        console.log(error)
+        display.write(["Location", "Error", "", ""]);
+    });
+
 }
 
 function cellular() {
     display.write(["Cellular","Loading...","",""])
 
-    fetch(base_url + '/modem')
+    fetch(url.resolve(base_url, 'modem'))
     .then(data=>{ 
         return data.json()})
     .then(res=>{
@@ -85,18 +93,24 @@ function cellular() {
 }
 
 function wifiConnect() {
-    display.write([
-        "WiFi Connect",
-        "Error: No File",
-        "",
-        ""
-    ])
+    display.write(["WiFi","Uploading...","",""])
+
+    fetch(url.resolve(base_url, 'usb/wifi'))
+    .then(data=>{ 
+        return data.json()})
+    .then(res=>{
+        display.write(["WiFi", `Uploading:${res.status}`,"",""]);
+    })
+    .catch(error=>{
+        display.write(["WiFi", `Uploading:error`,"",""]);
+    });
 }
 
 function power() {
     const title = "Power [Volts]"    
     display.write([title,"Loading...","",""])
-    fetch(base_url + '/sensor/voltages')
+
+    fetch(url.resolve(base_url, 'sensor/voltages'))
     .then(data=>{ 
         return data.json()})
     .then(res=>{
@@ -107,12 +121,18 @@ function power() {
     });
 }
 function sensor() {
-    display.write([
-        "Sensor",
-        "Pressure: 10 mPa",
-        "Celsius: 2.0",
-        ""
-    ])
+    const title = "Sensor"    
+    display.write([title,"Loading...","",""])
+
+    fetch(url.resolve(base_url, 'sensor/temperature'))
+    .then(data=>{ 
+        return data.json()})
+    .then(res=>{
+        display.write([title, `Temp:${res.celsius}C [${res.fahrenheit}F]`, "", ""]);
+    })
+    .catch(error=>{
+        display.write([title, "Error", "", ""]);
+    });
 }
 function server() {
     display.write([
@@ -125,7 +145,7 @@ function server() {
 function system() {
     display.write(["System","Loading...","",""])
 
-    fetch(base_url + '/id')
+    fetch(url.resolve(base_url, 'id'))
     .then(data=>{ 
         return data.json()})
     .then(res=>{

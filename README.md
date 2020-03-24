@@ -1,40 +1,27 @@
-
 # README #
 
-### What is this repository for? ###
+Node.js library for managing the 20x4 Lcd display for the CTT SensorStation.
 
-* Software for managing the lcd display for the SensorStation.
-* v0.1.0
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+### User Guide ###
 
-### How do I get set up? ###
+ - File Transfer 
+	 - Mount USB - Mounts a USB thumb drive .
+	 - Unmount USB - Unmounts USB thumb drive.
+	 - Download - Downloads CTT and SensorGnome files to USB thumb drive.
+	 - Get WiFi - Retrieve WiFi credentials from USB thumb drive.
+ - Network
+	 - Cellular - Carrier data and signal strength of cellular connection.
+	 - IP Address - Local network IP address(es) of SensorStation.
+ - Server
+	 - Health
+	 - Data
+ - Power - Voltages of solar panel, main power supply, and clock battery.
+ - Sensor - Pressure and temperature
+ - Location - GPS location of SensorStation.
+ - System - Device identifiers and software version.
 
-* Setup
-    * one
-    * two
-* Configuration
+### Questions? ###
 
-sudo systemctl status station-lcd
-sudo i2cdetect -y 1
-sudo systemctl stop station-lcd
-journalctl -r -u station-lcd
+* **Author:** Sheldon Blackshire **Email:** Sheldon.blackshire@celltracktech.com
 
-* Dependencies
-    * babel-cli
-    * babel-preset-env
-    * lcdi2c
-    * node-fetch
-    * onoff
-* How to run tests
-* Deployment instructions
-
-### Contribution guidelines ###
-
-* Writing tests
-* Code review
-* Other guidelines
-
-### Who do I talk to? ###
-
-* Author: Sheldon Blackshire Email: Sheldon.blackshire@celltracktech.com
-* Company: support@celltracktech.com
+* **Company:** www.celltracktech.com support@celltracktech.com

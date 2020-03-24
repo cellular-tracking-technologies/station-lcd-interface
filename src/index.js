@@ -1,7 +1,20 @@
 // Import Statements
 import MenuItem from "./menu-item";
 import MenuManager from "./menu-manager"
-import * as Views from './display-views';
+
+// Tasks
+import {IpAddressTask} from "./tasks/ip-address-task";
+import {CellularTask} from "./tasks/cellular-task";
+import {GpsTask} from "./tasks/gps-task";
+import {SensorTemperatureTask} from "./tasks/sensor-temp-task";
+import {SensorVoltageTask} from "./tasks/sensor-voltage-task";
+import {SystemIdsTask} from "./tasks/system-ids-task";
+import {SystemRestartTask} from "./tasks/system-restart-task";
+import {UsbDownloadTask} from "./tasks/usb-download-task";
+import {MountUsbTask} from "./tasks/usb-mount-task";
+import {UnmountUsbTask} from "./tasks/usb-unmount-task";
+import {UsbWifiUploadTask} from "./tasks/usb-wifi-upload-task";
+
 
 // Require Statements
 var Gpio = require('onoff').Gpio; // RaspberryPI Gpio functions
@@ -18,24 +31,26 @@ var Gpio = require('onoff').Gpio; // RaspberryPI Gpio functions
     Note: All menu items must have unique names!
 */ 
 
+const host = 'http://localhost:3000';
+
 let items = new MenuItem("main", null, [
     new MenuItem("File Transfer", null,[
-        new MenuItem("Mount Usb", Views.usbMount, []),
-        new MenuItem("Unmount Usb", Views.usbUnmount, []),
-        new MenuItem("Download", Views.usbDownload, []),
-        new MenuItem("Get WiFi", Views.wifiConnect, [])
+        new MenuItem("Mount Usb", new MountUsbTask(host), []),
+        new MenuItem("Unmount Usb", new UnmountUsbTask(host), []),
+        new MenuItem("Download", new UsbDownloadTask(host), []),
+        new MenuItem("Get WiFi", new UsbWifiUploadTask(host), [])
     ]),
     new MenuItem("Network", null, [
-        new MenuItem("Cellular", Views.cellular, []),
-        new MenuItem("Ip Address", Views.ipAddress, [])
+        new MenuItem("Cellular", new CellularTask(host), []),
+        new MenuItem("Ip Address", new IpAddressTask(), [])
     ]),
-    new MenuItem("Server", Views.server, []),
-    new MenuItem("Power", Views.power, []),
-    new MenuItem("Sensor", Views.sensor, []),
-    new MenuItem("Location", Views.location, []),
+    new MenuItem("Server", null, []),
+    new MenuItem("Power", new SensorVoltageTask(host), []),
+    new MenuItem("Temperature", new SensorTemperatureTask(host), []),
+    new MenuItem("Location", new GpsTask(host), []),
     new MenuItem("System", null, [
-        new MenuItem("About", Views.system, []),
-        new MenuItem("Restart", Views.restart, [])
+        new MenuItem("About", new SystemIdsTask(host), []),
+        new MenuItem("Restart", new SystemRestartTask(), [])
     ])
 ]);  
 /*

@@ -35,17 +35,17 @@ class MenuManager {
             C) Perform some task for each push of select
         */
         if (this.focus.childCount() == 0) {
-            if (typeof this.focus.view === "function") {
-                this.focus.view();
+            if (this.focus.view != null) {
+                this.view_();
                 return;
             }
         }
 
         // Launch a custom view by way of submenu transition.
         let row = this.focus.getChild(this.scroller.getSelectedRow())
-        if (typeof row.view === "function") {
+        if (row.view != null) {
             this.focus = row;
-            row.view();
+            this.view_();
             return;
         }
 
@@ -58,10 +58,19 @@ class MenuManager {
     }
     back() {
         if(this.focus.parent_id != null){
-            this.focus = this.findMenuItem(this.menu, this.focus.parent_id);
+            this.focus = this.findMenuItem_(this.menu, this.focus.parent_id);
             this.scroller.init(this.focus.childrenNames())
         }
         this.update_();
+    }
+    view_(){
+        display.write(this.focus.view.loading());
+        
+        this.focus.view.results().then((rows)=>{
+            display.write(rows);
+        }).catch((err)=>{
+            display.write(["Error", err, "", ""]);
+        });
     }
     update_() {
         let rows = this.scroller.getRows();
@@ -78,13 +87,13 @@ class MenuManager {
 
         display.write(formatted);
     }
-    findMenuItem(menu, id){
+    findMenuItem_(menu, id){
         if(menu.id == id){
             return menu;
         }else if(menu.childCount() > 0){
             let result = null;
             for(let i=0; i < menu.childCount(); i++){
-                 result = this.findMenuItem(menu.children[i], id);
+                 result = this.findMenuItem_(menu.children[i], id);
                  if(result != null){
                      break;
                  }

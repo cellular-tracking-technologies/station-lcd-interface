@@ -1,6 +1,6 @@
 // Import Statements
-import {Item as MenuItem } from "./menu";
-import {Manager as Menu} from "./station-menu"
+import MenuItem from "./menu-item";
+import MenuManager from "./menu-manager"
 import * as Views from './display-views';
 
 // Require Statements
@@ -33,9 +33,11 @@ let items = new MenuItem("main", null, [
     new MenuItem("Power", Views.power, []),
     new MenuItem("Sensor", Views.sensor, []),
     new MenuItem("Location", Views.location, []),
-    new MenuItem("System", Views.system, [])
+    new MenuItem("System", null, [
+        new MenuItem("About", Views.system, []),
+        new MenuItem("Restart", Views.restart, [])
+    ])
 ]);  
-
 /*
     Instantiate a menu manager that operates on a list of 
     menu items organized within a hierarchical structure.
@@ -47,7 +49,7 @@ let items = new MenuItem("main", null, [
         D) back()   - Exits a dir within a menu.
 */
 
-let menu = new Menu(items);
+let menu = new MenuManager(items);
 menu.init();
 
 /*

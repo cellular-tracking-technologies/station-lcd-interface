@@ -1,7 +1,8 @@
-import { display } from "./display";
+import display from "./display-driver";
 const fetch = require('node-fetch');
 var os = require('os');
 const url = require('url');
+const { exec } = require('child_process');
 
 const base_url = 'http://localhost:3000';
 
@@ -156,6 +157,19 @@ function system() {
     });
 }
 
+function restart(){
+    display.write(["System","Restarting...","",""])
+    let child = exec('shutdown -r now', (error,stdout, stderr) =>{
+        if(error){
+            display.write(["System","Restart Error!","",""])
+        }
+    })         
+    child.stdout.on('data', (data) => {                       
+    });
+    child.on('close', (code) => {
+    }); 
+}
+
 export {
     ipAddress,
     usbMount,
@@ -167,5 +181,6 @@ export {
     power,
     sensor,
     server,
-    system
+    system,
+    restart
 };

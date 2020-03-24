@@ -1,12 +1,12 @@
 // Import Statements
-import {Scroller, findById as findMenuItem} from './menu';
-import {display} from "./display";
+import MenuScroller from './menu-scroller';
+import display from "./display-driver";
 
-class Manager {
+class MenuManager {
     constructor(menu) {
         this.menu = menu;
         this.focus = menu;
-        this.scroller = new Scroller();
+        this.scroller = new MenuScroller();
     }
     init() {
 
@@ -58,7 +58,7 @@ class Manager {
     }
     back() {
         if(this.focus.parent_id != null){
-            this.focus = findMenuItem(this.menu, this.focus.parent_id);
+            this.focus = this.findMenuItem(this.menu, this.focus.parent_id);
             this.scroller.init(this.focus.childrenNames())
         }
         this.update_();
@@ -78,6 +78,21 @@ class Manager {
 
         display.write(formatted);
     }
+    findMenuItem(menu, id){
+        if(menu.id == id){
+            return menu;
+        }else if(menu.childCount() > 0){
+            let result = null;
+            for(let i=0; i < menu.childCount(); i++){
+                 result = this.findMenuItem(menu.children[i], id);
+                 if(result != null){
+                     break;
+                 }
+            }
+            return result;
+        }
+        return null;
+    }
 }
 
-export {Manager};
+export default MenuManager;

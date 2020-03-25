@@ -11,13 +11,13 @@ class SystemRestartTask {
         return new Promise((resolve, reject) => {
             let child = exec('shutdown -r now', (error, stdout, stderr) => {
                 if (error) {
-                    resolve(this.loading());
+                    resolve(null);
                 }
             })
             child.stdout.on('data', (data) => {
             });
             child.on('close', (code) => {
-                resolve(this.loading());
+                resolve(null);
             });
         });
     }

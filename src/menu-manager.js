@@ -67,7 +67,9 @@ class MenuManager {
         display.write(this.focus.view.loading());
         
         this.focus.view.results().then((rows)=>{
-            display.write(rows);
+            if(rows != null){
+                display.write(rows);
+            }
         }).catch((err)=>{
             display.write(["Error", err, "", ""]);
         });

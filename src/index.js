@@ -14,7 +14,7 @@ import {UsbDownloadTask} from "./tasks/usb-download-task";
 import {MountUsbTask} from "./tasks/usb-mount-task";
 import {UnmountUsbTask} from "./tasks/usb-unmount-task";
 import {UsbWifiUploadTask} from "./tasks/usb-wifi-upload-task";
-
+import {LedTask} from "./tasks/led-task";
 
 // Require Statements
 var Gpio = require('onoff').Gpio; // RaspberryPI Gpio functions
@@ -48,6 +48,26 @@ let items = new MenuItem("main", null, [
     new MenuItem("Power", new SensorVoltageTask(host), []),
     new MenuItem("Temperature", new SensorTemperatureTask(host), []),
     new MenuItem("Location", new GpsTask(host), []),
+    new MenuItem("Led", null, [
+        new MenuItem("Diagnostic A", null, [
+            new MenuItem("On", new LedTask(host, {header: "Diagnostic A", endpoint:'led/diag/a', state:'on'}), []),
+            new MenuItem("Off", new LedTask(host, {header: "Diagnostic A", endpoint:'led/diag/a', state:'off'}), []),
+            new MenuItem("Toggle", new LedTask(host, {header: "Diagnostic A", endpoint:'led/diag/a', state:'toggle'}), []),
+            new MenuItem("Blink", new LedTask(host, {header: "Diagnostic A", endpoint:'led/diag/a', state:'blink'}), [])
+        ]),
+        new MenuItem("Diagnostic B", null, [
+            new MenuItem("On", new LedTask(host, {header: "Diagnostic B", endpoint:'led/diag/b', state:'on'}), []),
+            new MenuItem("Off", new LedTask(host, {header: "Diagnostic B", endpoint:'led/diag/b', state:'off'}), []),
+            new MenuItem("Toggle", new LedTask(host, {header: "Diagnostic B", endpoint:'led/diag/b', state:'toggle'}), []),
+            new MenuItem("Blink", new LedTask(host, {header: "Diagnostic B", endpoint:'led/diag/b', state:'blink'}), [])
+        ]),
+        new MenuItem("Gps", null, [
+            new MenuItem("On", new LedTask(host, {header: 'Gps', endpoint:'led/gps', state:'on'}), []),
+            new MenuItem("Off", new LedTask(host, {header: 'Gps', endpoint:'led/gps', state:'off'}), []),
+            new MenuItem("Toggle", new LedTask(host, {header: 'Gps', endpoint:'led/gps', state:'toggle'}), []),
+            new MenuItem("Blink", new LedTask(host, {header: 'Gps', endpoint:'led/gps', state:'blink'}), [])
+        ])
+    ]),
     new MenuItem("System", null, [
         new MenuItem("About", new SystemIdsTask(host), []),
         new MenuItem("Restart", new SystemRestartTask(), [])

@@ -2,12 +2,18 @@
 import MenuScroller from './menu-scroller';
 import display from "./display-driver";
 
+/**
+ * 
+ */
 class MenuManager {
+    /**
+     * @param {Object} menu - Accepts root MenuItem object of a MenuItem tree
+     */
     constructor(menu) {
         this.menu = menu;
         this.focus = menu;
         this.scroller = new MenuScroller();
-    }
+    }    
     init() {
 
         this.scroller.init(this.focus.childrenNames());

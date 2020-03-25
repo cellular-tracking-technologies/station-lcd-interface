@@ -2,16 +2,16 @@ const { exec } = require('child_process');
 
 class SystemRestartTask {
     constructor() {
-        this.header = "Restarting";
+        this.header = "System";
     }
     loading() {
-        return [this.header + "..."];
+        return [this.header, "Restarting..."];
     }
     results() {
         return new Promise((resolve, reject) => {
             let child = exec('shutdown -r now', (error, stdout, stderr) => {
                 if (error) {
-                    display.write(["System", "Restart Error!", "", ""])
+                    resolve(this.loading());
                 }
             })
             child.stdout.on('data', (data) => {

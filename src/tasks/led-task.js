@@ -9,8 +9,6 @@ class LedTask {
             state: options.state,
             blink_rate_ms: 250
         })
-        console.log(this.url);
-        console.log(this.body);
     }
     loading() {
         return [this.header, "Loading..."];

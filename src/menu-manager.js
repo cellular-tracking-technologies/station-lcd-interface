@@ -13,6 +13,7 @@ class MenuManager {
         this.menu = menu;
         this.focus = menu;
         this.scroller = new MenuScroller();
+        this.refresh_;
     }    
     init() {
 
@@ -25,14 +26,18 @@ class MenuManager {
         })
     }
     up() {
+        this.autoRefresh_(false);
         this.scroller.up();
         this.update_();
     }
     down() {
+        this.autoRefresh_(false);
         this.scroller.down();
         this.update_();
     }
     select() {
+        this.autoRefresh_(false);
+
         /*
         User enters custom view from custom view.
         Potential Behaviors:
@@ -63,6 +68,7 @@ class MenuManager {
         this.update_();
     }
     back() {
+        this.autoRefresh_(false);
         if(this.focus.parent_id != null){
             this.focus = this.findMenuItem_(this.menu, this.focus.parent_id);
             this.scroller.init(this.focus.childrenNames())
@@ -76,6 +82,7 @@ class MenuManager {
             if(rows != null){
                 display.write(rows);
             }
+            this.autoRefresh_(true);
         }).catch((err)=>{
             display.write(["Error", err, "", ""]);
         });
@@ -94,6 +101,18 @@ class MenuManager {
         });
 
         display.write(formatted);
+    }
+    autoRefresh_(enable){
+        clearTimeout(this.refresh_);
+        if(enable == true){
+            if(typeof this.focus.view.autoRefresh !== 'undefined'){
+                if(this.focus.view.autoRefresh > 0){
+                    this.refresh_ = setTimeout(() =>{
+                        this.view_();
+                    }, this.focus.view.autoRefresh);
+                }
+            }
+        }
     }
     findMenuItem_(menu, id){
         if(menu.id == id){

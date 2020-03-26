@@ -2,9 +2,10 @@ const fetch = require('node-fetch');
 const url = require('url');
 
 class SensorTemperatureTask {
-    constructor(base_url) {
+    constructor(base_url, refresh=5000) {
         this.url = url.resolve(base_url, 'sensor/temperature')
         this.header = "Temperature";
+        this.autoRefresh = refresh;
     }
     loading() {
         return [this.header, "Loading..."];

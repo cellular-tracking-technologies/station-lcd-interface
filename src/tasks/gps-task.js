@@ -2,9 +2,10 @@ const fetch = require('node-fetch');
 const url = require('url');
 
 class GpsTask {
-    constructor(base_url) {
+    constructor(base_url, refresh=1000) {
         this.url = url.resolve(base_url, 'gps')
         this.header = "Location";
+        this.autoRefresh = refresh;
     }
     loading() {
         return [this.header, "Loading..."];

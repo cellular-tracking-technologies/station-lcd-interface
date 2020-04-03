@@ -79,7 +79,7 @@ let items = new MenuItem("main", null, [
     ]),
     new MenuItem("System", null, [
         new MenuItem("About", new SystemIdsTask(host), []),
-        new MenuItem("Time", new SystemTimeTask(), []),
+        new MenuItem("Time", new SystemTimeTask(host), []),
         new MenuItem("Restart", new SystemRestartTask(), [])
     ])
 ]);  

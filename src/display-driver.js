@@ -2,9 +2,24 @@ var LCD = require('lcdi2c');
 const { exec } = require('child_process');
 
 class Display {
-    constructor(columns = 20, rows = 4) {
-        this.columns = columns;
-        this.rows = rows;
+    /**
+     * @param {Object} settings
+     *  
+     */
+    constructor(settings) {
+        /** @private @const {number} columns Max characters that can be display on a single line. */
+        this.columns_ = settings.columns;
+        
+        /** @private @const {number} rows Max lines on the lcd. */
+        this.rows_ = settings.rows;
+        
+        /** @private @const {Array<number>} i2cAddresses Supported i2c-to-parallel converters for lcds. */
+        this.i2cAddresses_ = settings.i2cAddresses;
+        
+        /** @private @const {boolean} debug Data sent to lcd will also be routed to console.*/
+        this.debug_ = settings.debug;
+
+        /** @private {Object} Physical driver for lcd screen. */
         this.lcd = null;
     }
     /**
@@ -52,17 +67,16 @@ class Display {
      * @return {boolean} True if the lcd was discovered. 
      */
     initLcd_(port, addresses) {
-        const lcds = [0x3f, 0x27]; // i2c addresses of supported i2c-to-parallel converters for lcds
 
         let allowed = addresses.map((element) => {
             return parseInt(element, 16);
-        }).filter(address => lcds.includes(address));
+        }).filter(address => this.i2cAddresses_.includes(address));
 
         if (allowed.length == 0) {
             return false;
         }
 
-        this.lcd = new LCD(port, allowed[0], this.columns, this.rows); // https://github.com/craigmw/lcdi2c
+        this.lcd = new LCD(port, allowed[0], this.columns_, this.rows_); // https://github.com/craigmw/lcdi2c
 
         return true;
     }
@@ -77,11 +91,11 @@ class Display {
                 this.scanI2cPort_(1)  // i2c-1
             ]
             Promise.all(i2cScans).then((results) => {
-                results.forEach((i2c) =>{
-                    if(this.initLcd_(i2c.port, i2c.addresses) == true){
+                results.forEach((i2c) => {
+                    if (this.initLcd_(i2c.port, i2c.addresses) == true) {
                         resolve("ok");
                         return;
-                    }   
+                    }
                 })
                 reject("Display Not Found");
             }).catch((err) => {
@@ -89,6 +103,9 @@ class Display {
             });
         });
     }
+    /**
+     * Clears all data from the lcd screen.     
+     */
     clear() {
         if (this.lcd == null) {
             return;
@@ -96,6 +113,10 @@ class Display {
         this.lcd.on();
         this.lcd.clear();
     }
+    /**
+     * Maps a list of strings to each row then writes to the lcd screen.
+     * @param {Array<string>} rows - Data to be written to lcd.
+     */
     write(rows) {
         if (this.lcd == null) {
             return;
@@ -103,14 +124,19 @@ class Display {
 
         let line = 1;
         display.clear();
-        console.log("");
+        this.log_("");
         rows.forEach(element => {
             display.writeRow(element, line);
-            console.log(element);
+            this.log_(element);
             line++;
         });
-        console.log("");
+        this.log_("");
     }
+    /**
+     * Writes a string to a specific row of the lcd.
+     * @param {string} data - Data to be written to lcd.
+     * @param {number} row - Row of lcd to be written.     
+     */
     writeRow(data, row) {
         if (this.lcd == null) {
             return;
@@ -120,8 +146,22 @@ class Display {
         }
         this.lcd.println(data, row)
     }
+    /**
+     * Wrapper around console.log() that can be switched on and off via this.debug_.
+     * @param {*} data Information to be printed to the console.
+     */
+    log_(data) {
+        if (this.debug_ == true) {
+            console.log(data);
+        }
+    }
 }
 
-let display = new Display();
+let display = new Display({
+    columns: 20,
+    rows: 4,
+    i2cAddresses: [0x3f, 0x27],
+    debug: true
+});
 
 export default display;

@@ -15,23 +15,30 @@ import {MountUsbTask} from "./tasks/usb-mount-task";
 import {UnmountUsbTask} from "./tasks/usb-unmount-task";
 import {UsbWifiUploadTask} from "./tasks/usb-wifi-upload-task";
 import {LedTask} from "./tasks/led-task";
+import {HostnameTask} from "./tasks/hostname-task";
 
 // Require Statements
 var Gpio = require('onoff').Gpio; // RaspberryPI Gpio functions
 
+// App Config
+
+const host = 'http://localhost:3000';
+const UP_BUTTON = 4;
+const DOWN_BUTTON = 5;
+const SELECT_BUTTON = 6;
+const BACK_BUTTON = 7;
+
 /*
     Build the menu: Each item MUST be given:
         A) 'name' for selecting/traversings menu-items on the screen
-        B) A display view to be rendered when the menu item is 'selected'
+        B) A task to be rendered when the menu item is 'selected'
             Note: If item is a submenu, set view to null as the next menu will
-                be rendered in-leui of a custom view.
+                be rendered in-leui of a task.
         C) List of children, which must be of type MenuItem
             Note: If item has no children, set to []
 
     Note: All menu items must have unique names!
 */ 
-
-const host = 'http://localhost:3000';
 
 let items = new MenuItem("main", null, [
     new MenuItem("File Transfer", null,[
@@ -42,6 +49,7 @@ let items = new MenuItem("main", null, [
     ]),
     new MenuItem("Network", null, [
         new MenuItem("Cellular", new CellularTask(host), []),
+        new MenuItem("Hostname", new HostnameTask(), []),
         new MenuItem("Ip Address", new IpAddressTask(), [])
     ]),
     new MenuItem("Server", null, []),
@@ -96,7 +104,7 @@ menu.init();
     pressed multiple times in rapid sucession.
 */
 
-const button_up = new Gpio(4, 'in', 'rising', {debounceTimeout: 50});
+const button_up = new Gpio(UP_BUTTON, 'in', 'rising', {debounceTimeout: 50});
 button_up.watch((err, value) => {
     if (err) {
       throw err;
@@ -104,7 +112,7 @@ button_up.watch((err, value) => {
     menu.up();
 });
 
-const button_down = new Gpio(5, 'in', 'rising', {debounceTimeout: 50});
+const button_down = new Gpio(DOWN_BUTTON, 'in', 'rising', {debounceTimeout: 50});
 button_down.watch((err, value) => {
     if (err) {
       throw err;
@@ -112,7 +120,7 @@ button_down.watch((err, value) => {
     menu.down();
 });
 
-const button_select = new Gpio(6, 'in', 'rising', {debounceTimeout: 50});
+const button_select = new Gpio(SELECT_BUTTON, 'in', 'rising', {debounceTimeout: 50});
 button_select.watch((err, value) => {
     if (err) {
       throw err;
@@ -120,7 +128,7 @@ button_select.watch((err, value) => {
     menu.select();
 });
 
-const button_back = new Gpio(7, 'in', 'rising', {debounceTimeout: 50});
+const button_back = new Gpio(BACK_BUTTON, 'in', 'rising', {debounceTimeout: 50});
 button_back.watch((err, value) => {
     if (err) {
       throw err;

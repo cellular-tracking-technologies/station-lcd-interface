@@ -10,6 +10,7 @@ import {SensorTemperatureTask} from "./tasks/sensor-temp-task";
 import {SensorVoltageTask} from "./tasks/sensor-voltage-task";
 import {SystemIdsTask} from "./tasks/system-ids-task";
 import {SystemRestartTask} from "./tasks/system-restart-task";
+import {SystemTimeTask} from "./tasks/system-time-task";
 import {UsbDownloadTask} from "./tasks/usb-download-task";
 import {MountUsbTask} from "./tasks/usb-mount-task";
 import {UnmountUsbTask} from "./tasks/usb-unmount-task";
@@ -78,9 +79,12 @@ let items = new MenuItem("main", null, [
     ]),
     new MenuItem("System", null, [
         new MenuItem("About", new SystemIdsTask(host), []),
+        new MenuItem("Time", new SystemTimeTask(), []),
         new MenuItem("Restart", new SystemRestartTask(), [])
     ])
 ]);  
+
+
 /*
     Instantiate a menu manager that operates on a list of 
     menu items organized within a hierarchical structure.

@@ -24,7 +24,7 @@ class SystemTimeTask{
             Promise.all(timeFunctions).then((results) => {
                 let times = [];
                 results.forEach((time) => {
-                    let dt = moment(new Date(time)).utc().format('YY-MM-DD hh:mm:ss')
+                    let dt = moment(new Date(time)).utc().format('YY-MM-DD HH:mm:ss')
                     times.push(dt.toString());                    
                 })
                 resolve([

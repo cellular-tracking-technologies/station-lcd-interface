@@ -4,11 +4,11 @@ import MenuManager from "./menu-manager"
 
 // Tasks
 import {IpAddressTask} from "./tasks/ip-address-task";
-import {CellularTask} from "./tasks/cellular-task";
+import {CellularIds, CellularCarrier} from "./tasks/cellular-task";
 import {GpsTask} from "./tasks/gps-task";
 import {SensorTemperatureTask} from "./tasks/sensor-temp-task";
 import {SensorVoltageTask} from "./tasks/sensor-voltage-task";
-import {SystemIdsTask} from "./tasks/system-ids-task";
+import {SystemIdsTask, SystemMemoryTask, SystemUptimeTask} from "./tasks/system-about-task";
 import {SystemRestartTask} from "./tasks/system-restart-task";
 import {SystemTimeTask} from "./tasks/system-time-task";
 import {UsbDownloadTask} from "./tasks/usb-download-task";
@@ -49,7 +49,10 @@ let items = new MenuItem("main", null, [
         new MenuItem("Get WiFi", new UsbWifiUploadTask(host), [])
     ]),
     new MenuItem("Network", null, [
-        new MenuItem("Cellular", new CellularTask(host), []),
+        new MenuItem("Cellular", null, [
+            new MenuItem("Ids", new CellularIds(host), []),
+            new MenuItem("Carrier", new CellularCarrier(host), [])
+        ]),
         new MenuItem("Hostname", new HostnameTask(), []),
         new MenuItem("Ip Address", new IpAddressTask(), [])
     ]),
@@ -78,7 +81,11 @@ let items = new MenuItem("main", null, [
         ])
     ]),
     new MenuItem("System", null, [
-        new MenuItem("About", new SystemIdsTask(host), []),
+        new MenuItem("About", null, [
+            new MenuItem("Ids", new SystemIdsTask(host), []),
+            new MenuItem("Memory", new SystemMemoryTask(host), []),
+            new MenuItem("Uptime", new SystemUptimeTask(host), [])
+        ]),
         new MenuItem("Time", new SystemTimeTask(host), []),
         new MenuItem("Restart", new SystemRestartTask(), [])
     ])

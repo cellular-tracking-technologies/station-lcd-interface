@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cellular-tracking-technologies/station-lcd-interface.git"
+  },
   "scripts": {
     "es6": "node index.js",
     "dev": "npm run babel && node lib/index.js",
@@ -12,14 +16,16 @@
     "compile": "babel src -d lib --source-maps --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Sheldon Blackshire",
   "license": "ISC",
   "dependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
     "lcdi2c": "^1.0.6",
     "moment": "^2.24.0",
     "node-fetch": "^2.6.0",
     "onoff": "^5.0.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
   }
 }

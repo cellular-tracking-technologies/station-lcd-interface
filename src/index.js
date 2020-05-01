@@ -17,6 +17,7 @@ import {UnmountUsbTask} from "./tasks/usb-unmount-task";
 import {UsbWifiUploadTask} from "./tasks/usb-wifi-upload-task";
 import {LedTask} from "./tasks/led-task";
 import {HostnameTask} from "./tasks/hostname-task";
+import {InternetTask} from "./tasks/internet-task";
 
 // Require Statements
 var Gpio = require('onoff').Gpio; // RaspberryPI Gpio functions
@@ -53,6 +54,7 @@ let items = new MenuItem("main", null, [
             new MenuItem("Ids", new CellularIds(host), []),
             new MenuItem("Carrier", new CellularCarrier(host), [])
         ]),
+        new MenuItem("Ping", new InternetTask(host), []),
         new MenuItem("Hostname", new HostnameTask(), []),
         new MenuItem("Ip Address", new IpAddressTask(), [])
     ]),

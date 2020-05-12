@@ -8,6 +8,7 @@ import {CellularIds, CellularCarrier} from "./tasks/cellular-task";
 import {GpsTask} from "./tasks/gps-task";
 import {SensorTemperatureTask} from "./tasks/sensor-temp-task";
 import {SensorVoltageTask} from "./tasks/sensor-voltage-task";
+import {ServerConnectRequest} from "./tasks/server-task";
 import {SystemIdsTask, SystemMemoryTask, SystemUptimeTask} from "./tasks/system-about-task";
 import {SystemRestartTask} from "./tasks/system-restart-task";
 import {SystemTimeTask} from "./tasks/system-time-task";
@@ -58,7 +59,7 @@ let items = new MenuItem("main", null, [
         new MenuItem("Hostname", new HostnameTask(), []),
         new MenuItem("Ip Address", new IpAddressTask(), [])
     ]),
-    new MenuItem("Server", null, []),
+    new MenuItem("Server", new ServerConnectRequest(host), []),
     new MenuItem("Power", new SensorVoltageTask(host), []),
     new MenuItem("Temperature", new SensorTemperatureTask(host), []),
     new MenuItem("Location", new GpsTask(host), []),

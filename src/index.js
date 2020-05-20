@@ -19,6 +19,7 @@ import {UsbWifiUploadTask} from "./tasks/usb-wifi-upload-task";
 import {LedTask} from "./tasks/led-task";
 import {HostnameTask} from "./tasks/hostname-task";
 import {InternetTask} from "./tasks/internet-task";
+import {QaqcRequest} from './tasks/qaqc-task';
 
 // Require Statements
 var Gpio = require('onoff').Gpio; // RaspberryPI Gpio functions
@@ -89,6 +90,7 @@ let items = new MenuItem("main", null, [
             new MenuItem("Memory", new SystemMemoryTask(host), []),
             new MenuItem("Uptime", new SystemUptimeTask(host), [])
         ]),
+        new MenuItem("QAQC", new QaqcRequest(host), []),
         new MenuItem("Time", new SystemTimeTask(host), []),
         new MenuItem("Restart", new SystemRestartTask(), [])
     ])

@@ -3,7 +3,7 @@ const url = require('url');
 
 class ServerConnectRequest {
     constructor(base_url) {
-        this.url = url.resolve(base_url, '/radio/server-checkin')
+        this.url = url.resolve(base_url, '/radio/checkin')
         this.header = "Connect Request";
     }
     loading() {

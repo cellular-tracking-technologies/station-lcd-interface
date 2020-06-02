@@ -9,7 +9,7 @@ import {GpsTask} from "./tasks/gps-task";
 import {SensorTemperatureTask} from "./tasks/sensor-temp-task";
 import {SensorVoltageTask} from "./tasks/sensor-voltage-task";
 import {ServerConnectRequest} from "./tasks/server-task";
-import {SystemIdsTask, SystemMemoryTask, SystemUptimeTask} from "./tasks/system-about-task";
+import {SystemImageTask, SystemIdsTask, SystemMemoryTask, SystemUptimeTask} from "./tasks/system-about-task";
 import {SystemRestartTask} from "./tasks/system-restart-task";
 import {SystemTimeTask} from "./tasks/system-time-task";
 import {UsbDownloadTask} from "./tasks/usb-download-task";
@@ -51,6 +51,17 @@ let items = new MenuItem("main", null, [
         new MenuItem("Download", new UsbDownloadTask(host), []),
         new MenuItem("Get WiFi", new UsbWifiUploadTask(host), [])
     ]),
+    new MenuItem("System", null, [
+        new MenuItem("About", null, [
+            new MenuItem("Image", new SystemImageTask(host), []),
+            new MenuItem("Ids", new SystemIdsTask(host), []),
+            new MenuItem("Memory", new SystemMemoryTask(host), []),
+            new MenuItem("Uptime", new SystemUptimeTask(host), [])
+        ]),
+        new MenuItem("QAQC", new QaqcRequest(host), []),
+        new MenuItem("Time", new SystemTimeTask(host), []),
+        new MenuItem("Restart", new SystemRestartTask(), [])
+    ]),
     new MenuItem("Network", null, [
         new MenuItem("Cellular", null, [
             new MenuItem("Ids", new CellularIds(host), []),
@@ -83,16 +94,6 @@ let items = new MenuItem("main", null, [
             new MenuItem("Toggle", new LedTask(host, {header: 'Gps', endpoint:'led/gps', state:'toggle'}), []),
             new MenuItem("Blink", new LedTask(host, {header: 'Gps', endpoint:'led/gps', state:'blink'}), [])
         ])
-    ]),
-    new MenuItem("System", null, [
-        new MenuItem("About", null, [
-            new MenuItem("Ids", new SystemIdsTask(host), []),
-            new MenuItem("Memory", new SystemMemoryTask(host), []),
-            new MenuItem("Uptime", new SystemUptimeTask(host), [])
-        ]),
-        new MenuItem("QAQC", new QaqcRequest(host), []),
-        new MenuItem("Time", new SystemTimeTask(host), []),
-        new MenuItem("Restart", new SystemRestartTask(), [])
     ])
 ]);  
 

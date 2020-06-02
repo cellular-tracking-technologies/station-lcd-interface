@@ -1,6 +1,34 @@
 const fetch = require('node-fetch');
 const url = require('url');
 
+class SystemImageTask {
+    constructor(base_url) {
+        this.url = url.resolve(base_url, 'about')
+        this.header = "System Image";
+    }
+    loading() {
+        return [this.header, "Loading..."];
+    }
+    results() {
+        return new Promise((resolve, reject) => {
+            fetch(this.url)
+                .then(data => {
+                    return data.json()
+                })
+                .then(res => {
+                    resolve([
+                        this.header, 
+                        `image: ${res.station_image}`, 
+                        `update: ${res.station_software}`
+                    ]);
+                })
+                .catch(error => {
+                    resolve([this.header, `error`]);
+                });
+        });
+    }
+}
+
 class SystemIdsTask {
     constructor(base_url) {
         this.url = url.resolve(base_url, 'about')
@@ -98,4 +126,4 @@ class SystemUptimeTask {
     }
 }
 
-export { SystemIdsTask, SystemMemoryTask, SystemUptimeTask};
+export { SystemImageTask, SystemIdsTask, SystemMemoryTask, SystemUptimeTask};

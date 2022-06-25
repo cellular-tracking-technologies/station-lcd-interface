@@ -21,7 +21,7 @@
   "dependencies": {
     "lcdi2c": "^1.0.6",
     "moment": "^2.24.0",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^2.6.7",
     "onoff": "^5.0.1"
   },
   "devDependencies": {
